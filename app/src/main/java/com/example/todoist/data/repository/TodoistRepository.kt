@@ -27,7 +27,8 @@ class TodoistRepository @Inject constructor(
                 Single.just(it)
             }.onErrorResumeNext {
                 todoistCDS.getProjects()
-            }
+            }.subscribeOn(ioScheduler)
+            .observeOn(mainScheduler)
 
     fun getSections(projectId: Long): Single<List<Section>> =
         todoistRDS.getSections(projectId)
@@ -36,7 +37,8 @@ class TodoistRepository @Inject constructor(
                 Single.just(it)
             }.onErrorResumeNext {
                 todoistCDS.getSections(projectId)
-            }
+            }.subscribeOn(ioScheduler)
+            .observeOn(mainScheduler)
 
     fun getTasks(sectionId: Long): Single<List<Task>> =
         todoistRDS.getTasks(sectionId)
@@ -45,8 +47,11 @@ class TodoistRepository @Inject constructor(
                 Single.just(it)
             }.onErrorResumeNext {
                 todoistCDS.getTasks(sectionId)
-            }
+            }.subscribeOn(ioScheduler)
+            .observeOn(mainScheduler)
 
     fun addTask(taskBody: UpsertTaskBody): Completable =
         todoistRDS.addTask(taskBody)
+            .subscribeOn(ioScheduler)
+            .observeOn(mainScheduler)
 }
